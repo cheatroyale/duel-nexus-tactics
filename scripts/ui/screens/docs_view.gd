@@ -96,9 +96,14 @@ func _build() -> void:
 	back.pressed.connect(func() -> void: back_requested.emit())
 	header.add_child(back)
 
+	var tabs_scroll := ScrollContainer.new()
+	tabs_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	tabs_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	root.add_child(tabs_scroll)
+
 	tabs = HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", 8)
-	root.add_child(tabs)
+	tabs_scroll.add_child(tabs)
 
 	var panel := PanelContainer.new()
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL

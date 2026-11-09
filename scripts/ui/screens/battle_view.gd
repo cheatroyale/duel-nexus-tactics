@@ -10,12 +10,12 @@ signal quit_requested
 var battle: Battle
 var encounter_index := 0
 
-var enemy_row: HBoxContainer
-var player_row: HBoxContainer
+var enemy_row: HFlowContainer
+var player_row: HFlowContainer
 var round_label: Label
 var energy_label: Label
 var hint_label: Label
-var action_box: HBoxContainer
+var action_box: HFlowContainer
 var end_turn_button: Button
 var log_label: RichTextLabel
 
@@ -67,48 +67,56 @@ func _build() -> void:
 	root.add_theme_constant_override("separation", 8)
 	scroll.add_child(root)
 
-	# Top bar.
+	# Top bar: the encounter and retreat on one line, the round/energy readout
+	# on the next, so both stay readable on a phone.
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 12)
 	root.add_child(top)
 	var encounter_name := String(DB.encounter(encounter_index).get("name", "Battle"))
 	top.add_child(Palette.label(encounter_name, 20, Palette.TEXT))
-	round_label = Palette.label("", 16, Palette.MUTED)
-	top.add_child(round_label)
-	energy_label = Palette.label("", 16, Palette.ACCENT_2)
-	top.add_child(energy_label)
 	top.add_child(Palette.spacer())
 	var retreat := Palette.button("Retreat")
 	retreat.pressed.connect(func() -> void: quit_requested.emit())
 	top.add_child(retreat)
 
-	# Enemy row.
+	var meters := HBoxContainer.new()
+	meters.add_theme_constant_override("separation", 16)
+	root.add_child(meters)
+	round_label = Palette.label("", 16, Palette.MUTED)
+	meters.add_child(round_label)
+	energy_label = Palette.label("", 16, Palette.ACCENT_2)
+	meters.add_child(energy_label)
+
+	# Enemy row: flows into as many lines as the screen needs.
 	root.add_child(Palette.label("ENEMY", 12, Palette.MUTED))
-	enemy_row = HBoxContainer.new()
-	enemy_row.add_theme_constant_override("separation", 10)
-	enemy_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	enemy_row.custom_minimum_size = Vector2(0, 176)
+	enemy_row = HFlowContainer.new()
+	enemy_row.add_theme_constant_override("h_separation", 8)
+	enemy_row.add_theme_constant_override("v_separation", 8)
 	root.add_child(enemy_row)
 
 	# Player row.
 	root.add_child(Palette.label("YOUR SQUAD", 12, Palette.MUTED))
-	player_row = HBoxContainer.new()
-	player_row.add_theme_constant_override("separation", 10)
-	player_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	player_row.custom_minimum_size = Vector2(0, 176)
+	player_row = HFlowContainer.new()
+	player_row.add_theme_constant_override("h_separation", 8)
+	player_row.add_theme_constant_override("v_separation", 8)
 	root.add_child(player_row)
 
-	# Action bar.
+	# Action bar: hint on top, touch-sized buttons below.
 	var bar := PanelContainer.new()
 	root.add_child(bar)
-	var bar_line := HBoxContainer.new()
-	bar_line.add_theme_constant_override("separation", 10)
-	bar.add_child(bar_line)
+	var bar_box := VBoxContainer.new()
+	bar_box.add_theme_constant_override("separation", 8)
+	bar.add_child(bar_box)
 	hint_label = Palette.label("", 13, Palette.MUTED)
-	hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bar_line.add_child(hint_label)
-	action_box = HBoxContainer.new()
-	action_box.add_theme_constant_override("separation", 6)
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bar_box.add_child(hint_label)
+	var bar_line := HBoxContainer.new()
+	bar_line.add_theme_constant_override("separation", 8)
+	bar_box.add_child(bar_line)
+	action_box = HFlowContainer.new()
+	action_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_box.add_theme_constant_override("h_separation", 6)
+	action_box.add_theme_constant_override("v_separation", 6)
 	bar_line.add_child(action_box)
 	end_turn_button = Palette.button("End Turn", true)
 	end_turn_button.pressed.connect(_on_end_turn)
@@ -121,7 +129,7 @@ func _build() -> void:
 	log_label = RichTextLabel.new()
 	log_label.scroll_following = true
 	log_label.bbcode_enabled = false
-	log_label.custom_minimum_size = Vector2(0, 110)
+	log_label.custom_minimum_size = Vector2(0, 170)
 	log_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	log_label.add_theme_font_size_override("normal_font_size", Palette.font(13))
 	log_label.add_theme_color_override("default_color", Palette.MUTED)
@@ -144,7 +152,7 @@ func _refresh() -> void:
 	_refresh_actions()
 
 
-func _refresh_row(row: HBoxContainer, team: Array[CardInstance], is_player: bool) -> void:
+func _refresh_row(row: HFlowContainer, team: Array[CardInstance], is_player: bool) -> void:
 	Palette.clear(row)
 	var allies := battle.living(battle.player_team) if is_player else battle.living(battle.enemy_team)
 	for card in team:
@@ -157,7 +165,7 @@ func _refresh_row(row: HBoxContainer, team: Array[CardInstance], is_player: bool
 		if card.has_acted and card.alive:
 			opts["spent"] = true
 		view.setup(card, card.attack_total(allies), card.hp, card.max_hp, opts)
-		view.custom_minimum_size = Vector2(160, 198)
+		view.custom_minimum_size = Vector2(200, 250)
 		view.card_pressed.connect(_on_card_pressed)
 		row.add_child(view)
 

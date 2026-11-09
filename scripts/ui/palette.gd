@@ -23,10 +23,10 @@ const STONE := Color("9aa6b2")
 const SPIRIT := Color("6fe3e1")
 const WILD := Color("f472b6")
 
-## All text is drawn at size * FONT_SCALE. The design is a 960x600 canvas, so on
-## a phone (which scales that down to fit) the raw sizes would be tiny; this
-## keeps body text readable without touching every call site.
-const FONT_SCALE := 1.35
+## All text is drawn at size * FONT_SCALE. The design canvas is 720x1280 (a
+## phone in portrait), so raw desktop sizes would be unreadable on a handset;
+## this keeps body text around 13-14pt without touching every call site.
+const FONT_SCALE := 1.8
 
 
 static func font(size: int) -> int:
@@ -63,10 +63,10 @@ static func button_box(bg: Color, radius: int = 8) -> StyleBoxFlat:
 	box.set_corner_radius_all(radius)
 	box.set_border_width_all(1)
 	box.border_color = bg.lightened(0.12)
-	box.content_margin_left = 14.0
-	box.content_margin_right = 14.0
-	box.content_margin_top = 7.0
-	box.content_margin_bottom = 7.0
+	box.content_margin_left = 16.0
+	box.content_margin_right = 16.0
+	box.content_margin_top = 10.0
+	box.content_margin_bottom = 10.0
 	return box
 
 
@@ -89,6 +89,7 @@ static func button(text: String, primary: bool = false) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.focus_mode = Control.FOCUS_NONE
+	b.custom_minimum_size = Vector2(0, 64)
 	b.add_theme_font_size_override("font_size", font(14))
 	var base := ACCENT if primary else PANEL_ALT
 	b.add_theme_stylebox_override("normal", button_box(base))

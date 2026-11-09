@@ -16,7 +16,7 @@ var encounter_index := 0
 
 var roster_box: VBoxContainer
 var trait_box: VBoxContainer
-var squad_box: HBoxContainer
+var squad_box: HFlowContainer
 var points_label: Label
 var hint_label: Label
 var begin_button: Button
@@ -41,18 +41,29 @@ func _build() -> void:
 	root.add_theme_constant_override("separation", 12)
 	margin.add_child(root)
 
-	# Header.
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 12)
+	# Header: title and back on one line, the rules hint and points below, so a
+	# phone in portrait keeps both readable.
+	var header := VBoxContainer.new()
+	header.add_theme_constant_override("separation", 6)
 	root.add_child(header)
-	header.add_child(Palette.label("Squad Builder", 26, Palette.TEXT))
-	header.add_child(Palette.label("Auras stack from every living ally.", 12, Palette.MUTED))
-	header.add_child(Palette.spacer())
-	points_label = Palette.label("", 16, Palette.ACCENT_2)
-	header.add_child(points_label)
+
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 12)
+	header.add_child(title_row)
+	title_row.add_child(Palette.label("Squad Builder", 26, Palette.TEXT))
+	title_row.add_child(Palette.spacer())
 	var back := Palette.button("Back")
 	back.pressed.connect(func() -> void: back_requested.emit())
-	header.add_child(back)
+	title_row.add_child(back)
+
+	var info_row := HBoxContainer.new()
+	info_row.add_theme_constant_override("separation", 12)
+	header.add_child(info_row)
+	var tagline := Palette.wrapped("Auras stack from every living ally.", 12, Palette.MUTED)
+	tagline.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_row.add_child(tagline)
+	points_label = Palette.label("", 16, Palette.ACCENT_2)
+	info_row.add_child(points_label)
 
 	# Roster and codex on top, squad underneath, so a phone-sized screen keeps
 	# readable columns instead of squeezing three side by side.
@@ -85,33 +96,53 @@ func _build() -> void:
 
 	var squad_col := _make_column("YOUR SQUAD", 0, true)
 	columns.add_child(squad_col)
-	squad_box = HBoxContainer.new()
-	squad_box.add_theme_constant_override("separation", 8)
-	squad_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	squad_box = HFlowContainer.new()
+	squad_box.add_theme_constant_override("h_separation", 8)
+	squad_box.add_theme_constant_override("v_separation", 8)
 	var squad_scroll := ScrollContainer.new()
 	squad_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	squad_scroll.custom_minimum_size = Vector2(0, 256)
-	squad_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	squad_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	squad_scroll.custom_minimum_size = Vector2(0, 280)
+	squad_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	squad_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	squad_scroll.add_child(squad_box)
 	squad_col.add_child(squad_scroll)
 
-	# Footer.
-	var footer := HBoxContainer.new()
+	# Footer: encounter picker on one line, hint and Begin Battle below it.
+	var footer := VBoxContainer.new()
 	footer.add_theme_constant_override("separation", 8)
 	root.add_child(footer)
-	footer.add_child(Palette.label("Encounter:", 13, Palette.MUTED))
+
+	var encounter_row := HBoxContainer.new()
+	encounter_row.add_theme_constant_override("separation", 8)
+	footer.add_child(encounter_row)
+	encounter_row.add_child(Palette.label("Encounter:", 13, Palette.MUTED))
+
+	var encounter_scroll := ScrollContainer.new()
+	encounter_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	encounter_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	encounter_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	encounter_row.add_child(encounter_scroll)
+	var encounter_box := HBoxContainer.new()
+	encounter_box.add_theme_constant_override("separation", 8)
+	encounter_scroll.add_child(encounter_box)
+
 	for i in DB.ENCOUNTERS.size():
 		var button := Palette.button("")
 		button.pressed.connect(_select_encounter.bind(i))
-		footer.add_child(button)
+		encounter_box.add_child(button)
 		encounter_buttons.append(button)
-	footer.add_child(Palette.spacer())
+
+	var action_row := HBoxContainer.new()
+	action_row.add_theme_constant_override("separation", 8)
+	footer.add_child(action_row)
 	hint_label = Palette.label("", 12, Palette.MUTED)
-	footer.add_child(hint_label)
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_row.add_child(hint_label)
 	begin_button = Palette.button("Begin Battle", true)
 	begin_button.pressed.connect(_on_begin_pressed)
-	footer.add_child(begin_button)
+	action_row.add_child(begin_button)
 
 
 func _make_column(title: String, min_width: int, expand: bool) -> VBoxContainer:
@@ -247,7 +278,7 @@ func _refresh_squad() -> void:
 			"selected": i == selected_index,
 			"chips_clickable": true,
 		})
-		view.custom_minimum_size = Vector2(162, 222)
+		view.custom_minimum_size = Vector2(200, 250)
 		view.card_pressed.connect(_on_squad_card_pressed)
 		view.trait_pressed.connect(_remove_stack)
 		squad_box.add_child(view)
