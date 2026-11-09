@@ -62,10 +62,21 @@ func _build_menu() -> Control:
 	rules_box.add_child(Palette.wrapped("In battle each card acts once per round. Attacking costs 1 energy, abilities cost their printed price, and every round grants both sides 2 energy.", 13, Palette.TEXT))
 
 	box.add_child(Palette.gap(4))
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	box.add_child(actions)
+
 	var start := Palette.button("Build a Squad", true)
 	start.custom_minimum_size = Vector2(0, 44)
+	start.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	start.pressed.connect(_open_builder)
-	box.add_child(start)
+	actions.add_child(start)
+
+	var docs_button := Palette.button("Docs")
+	docs_button.custom_minimum_size = Vector2(0, 44)
+	docs_button.tooltip_text = "Sync check, design notes, roadmap and how to move the project into Xogot."
+	docs_button.pressed.connect(_open_docs)
+	actions.add_child(docs_button)
 
 	box.add_child(Palette.label(
 		"Encounters cleared: %d / %d" % [GameState.cleared, DB.ENCOUNTERS.size()],
@@ -84,6 +95,12 @@ func _open_builder() -> void:
 	builder.back_requested.connect(show_menu)
 	builder.begin_battle.connect(_start_battle)
 	_swap(builder)
+
+
+func _open_docs() -> void:
+	var view := DocsView.new()
+	view.back_requested.connect(show_menu)
+	_swap(view)
 
 
 func _start_battle(squad: Array[CardInstance], encounter_index: int) -> void:

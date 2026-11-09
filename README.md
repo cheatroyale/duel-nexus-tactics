@@ -32,7 +32,8 @@ Open `project.godot` in Godot 4 and press Play. The boot scene is
 ```
 assets/          art, audio, fonts (source files; see assets/README.md)
 data/            authored content resources (see data/README.md)
-docs/            architecture and roadmap notes
+docs/            architecture, roadmap, transfer notes (read in-game via Docs)
+SYNC-CHECK.md    marker doc: is Xogot opening this folder? (Docs -> Sync check)
 scenes/
   main.tscn      the boot scene
   screens/       future .tscn screens
