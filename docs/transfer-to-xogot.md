@@ -112,3 +112,17 @@ without complaint.
 and every script that uses it reported the same error. Only the first error in
 the log matters — that was `trait` being a reserved GDScript keyword, now fixed
 in `DB.trait_def`.
+
+
+## Telling an old copy from the current one
+
+Two markers exist only in the fixed version:
+
+* a `VERSION` file at the project root (currently `3`), shown as "build 3"
+  under the main menu title;
+* `scripts/data/db.gd` declares `static func trait_def(trait_id: String)`. If it
+  says `static func trait(...)`, that copy predates the fix and will always
+  report `Expected function name after "func"`.
+
+If either marker is missing, the folder was downloaded before commit `248fe5f`;
+download the repository again and open the new folder.

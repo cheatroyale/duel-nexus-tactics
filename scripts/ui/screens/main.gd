@@ -44,6 +44,11 @@ func _build_menu() -> Control:
 	center.add_child(box)
 
 	box.add_child(Palette.label(game_title(), 44, Palette.ACCENT))
+
+	var build := build_label()
+	if build != "":
+		box.add_child(Palette.label(build, 12, Palette.MUTED))
+
 	box.add_child(Palette.wrapped(
 		"A team-building card battler. Draft five cards, stack traits on them until they multiply each other, then fight through three encounters.",
 		15,
@@ -88,6 +93,17 @@ func _build_menu() -> Control:
 
 func game_title() -> String:
 	return String(ProjectSettings.get_setting("application/config/name", "Duel Nexus Tactics"))
+
+
+## Reads res://VERSION so a copy can be told apart from an older download.
+func build_label() -> String:
+	var path := "res://VERSION"
+	if not FileAccess.file_exists(path):
+		return ""
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	return "build %s" % file.get_as_text().strip_edges()
 
 
 func _open_builder() -> void:
