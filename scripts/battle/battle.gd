@@ -220,7 +220,7 @@ func _use_ability(caster: CardInstance) -> void:
 			pass
 
 
-func _weakest(team: Array) -> CardInstance:
+func _weakest(team: Array[CardInstance]) -> CardInstance:
 	var best: CardInstance = null
 	for c in team:
 		if not c.alive:
@@ -230,20 +230,20 @@ func _weakest(team: Array) -> CardInstance:
 	return best
 
 
-func _strongest(team: Array) -> CardInstance:
+func _strongest(team: Array[CardInstance]) -> CardInstance:
 	var best: CardInstance = null
 	var best_atk := -1
 	for c in team:
 		if not c.alive:
 			continue
-		var atk := c.attack_total(team)
+		var atk: int = c.attack_total(team)
 		if atk > best_atk:
 			best_atk = atk
 			best = c
 	return best
 
 
-func _most_wounded(team: Array) -> CardInstance:
+func _most_wounded(team: Array[CardInstance]) -> CardInstance:
 	var best: CardInstance = null
 	var best_ratio := 2.0
 	for c in team:
