@@ -39,3 +39,16 @@ jobs:
             exit 1
           fi
 
+      - name: Boot the game for a few frames
+        run: |
+          set -uo pipefail
+          ./godot --headless --path . --quit-after 3 > run.log 2>&1 || true
+          echo "=== runtime errors ==="
+          grep -E 'SCRIPT ERROR|ERROR:' run.log | head -20 || true
+          echo "=== end of runtime errors ==="
+          if grep -q 'SCRIPT ERROR' run.log; then
+            echo "::error::The game reported script errors while booting"
+            exit 1
+          fi
+
+
