@@ -18,22 +18,20 @@ from the main menu's **Docs** button, alongside **Sync check**
 (`SYNC-CHECK.md` at the project root), which is the quickest way to tell whether
 Xogot opens this folder or a different copy.
 
-## Route A — GitHub (recommended, carries everything)
+## Route A — GitHub (done)
 
-GitHub is already signed in here as `@cheatroyale`, and the repository has no
-remote yet.
+The project is published at
+**https://github.com/cheatroyale/duel-nexus-tactics** on branch `main`, and this
+folder pushes there.
 
-1. From this chat: ask for the repository to be created — private,
-   `cheatroyale/Duel-Nexus-Tactics`, branch `main`, every file included. There
-   is no remote configured yet, so this step has to happen first.
-2. On the phone or a computer, open the repo and use **Code → Download ZIP**
-   (or `git clone`).
-3. In Xogot: project manager → import the unzipped folder (or copy it onto the
-   Xogot project folder and open it). `project.godot` sits at the folder root,
+1. On the device, open the repo and use **Code → Download ZIP** (or `git clone`
+   on a computer).
+2. In Xogot: project manager → import the unzipped folder (or copy it into
+   Xogot's project folder and open it). `project.godot` sits at the folder root,
    which is what Xogot needs to see.
-4. Open the project and press Play. `scenes/main.tscn` is the boot scene.
+3. Open the project and press Play. `scenes/main.tscn` is the boot scene.
 
-After that, keeping Xogot up to date is `git pull`, and later changes in this
+Keeping Xogot up to date after that is `git pull`, and later changes in this
 chat can be pushed to the same repo.
 
 ## Route B — manual copy
