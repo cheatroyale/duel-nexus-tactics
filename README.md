@@ -11,6 +11,10 @@ squad of five; traits are the "stack components" you layer on them, Siralim-styl
 Open `project.godot` in Godot 4 and press Play. The boot scene is
 `scenes/main.tscn`.
 
+Every push runs a GitHub Actions check that imports the project with a headless
+Godot and boots it for a few frames, so parse and startup errors show up in the
+repo's Actions tab instead of in the editor.
+
 ## How to play
 
 1. **Build a Squad** — pick up to five cards from the roster, then click a card

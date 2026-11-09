@@ -48,8 +48,8 @@ this is mostly a new `scripts/battle/hand.gd` and a board layout pass.
 
 ## 7. Engineering hygiene
 
-* Git repository plus CI (headless Godot run + unit tests) once the layout is in
-  place.
+* Git repository and headless Godot parse/boot CI are in place
+  (`.github/workflows/godot-check.yml`); the next step here is real unit tests.
 * Export presets for desktop and mobile (`project.godot` uses the mobile
   renderer).
 * Balance sweep script in `tests/` that plays every encounter N times with
