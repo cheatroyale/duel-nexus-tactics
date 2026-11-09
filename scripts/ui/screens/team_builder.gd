@@ -54,20 +54,31 @@ func _build() -> void:
 	back.pressed.connect(func() -> void: back_requested.emit())
 	header.add_child(back)
 
-	# Three columns.
-	var columns := HBoxContainer.new()
+	# Roster and codex on top, squad underneath, so a phone-sized screen keeps
+	# readable columns instead of squeezing three side by side.
+	var columns := VBoxContainer.new()
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	columns.add_theme_constant_override("separation", 14)
+	columns.add_theme_constant_override("separation", 10)
 	root.add_child(columns)
 
-	var roster_col := _make_column("ROSTER", 300, false)
-	columns.add_child(roster_col)
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 14)
+	top_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var top_scroll := ScrollContainer.new()
+	top_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	top_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	top_scroll.add_child(top_row)
+	columns.add_child(top_scroll)
+
+	var roster_col := _make_column("ROSTER", 280, false)
+	top_row.add_child(roster_col)
 	roster_box = VBoxContainer.new()
 	roster_box.add_theme_constant_override("separation", 6)
 	roster_col.add_child(_make_scroll(roster_box))
 
-	var trait_col := _make_column("TRAIT CODEX", 330, false)
-	columns.add_child(trait_col)
+	var trait_col := _make_column("TRAIT CODEX", 320, false)
+	top_row.add_child(trait_col)
 	trait_box = VBoxContainer.new()
 	trait_box.add_theme_constant_override("separation", 6)
 	trait_col.add_child(_make_scroll(trait_box))
@@ -78,8 +89,8 @@ func _build() -> void:
 	squad_box.add_theme_constant_override("separation", 8)
 	squad_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	var squad_scroll := ScrollContainer.new()
-	squad_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	squad_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	squad_scroll.custom_minimum_size = Vector2(0, 232)
 	squad_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	squad_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	squad_scroll.add_child(squad_box)

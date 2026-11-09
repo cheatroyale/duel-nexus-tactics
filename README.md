@@ -11,6 +11,11 @@ squad of five; traits are the "stack components" you layer on them, Siralim-styl
 Open `project.godot` in Godot 4 and press Play. The boot scene is
 `scenes/main.tscn`.
 
+The project targets a 960x600 landscape canvas with `expand` stretch and every
+screen scrolls when content does not fit, so it stays legible on a phone as well
+as a desktop. `display/window/handheld/orientation` is set to
+`sensor_landscape`.
+
 Every push runs a GitHub Actions check that imports the project with a headless
 Godot and boots it for a few frames, so parse and startup errors show up in the
 repo's Actions tab instead of in the editor.

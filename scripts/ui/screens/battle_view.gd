@@ -57,9 +57,15 @@ func _build() -> void:
 		margin.add_theme_constant_override("margin_" + side, 14)
 	add_child(margin)
 
+	# Scrolls instead of clipping when the screen is shorter than the board.
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	margin.add_child(scroll)
+
 	var root := VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.add_theme_constant_override("separation", 8)
-	margin.add_child(root)
+	scroll.add_child(root)
 
 	# Top bar.
 	var top := HBoxContainer.new()
@@ -81,7 +87,7 @@ func _build() -> void:
 	enemy_row = HBoxContainer.new()
 	enemy_row.add_theme_constant_override("separation", 10)
 	enemy_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	enemy_row.custom_minimum_size = Vector2(0, 196)
+	enemy_row.custom_minimum_size = Vector2(0, 176)
 	root.add_child(enemy_row)
 
 	# Player row.
@@ -89,7 +95,7 @@ func _build() -> void:
 	player_row = HBoxContainer.new()
 	player_row.add_theme_constant_override("separation", 10)
 	player_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	player_row.custom_minimum_size = Vector2(0, 196)
+	player_row.custom_minimum_size = Vector2(0, 176)
 	root.add_child(player_row)
 
 	# Action bar.
@@ -151,7 +157,7 @@ func _refresh_row(row: HBoxContainer, team: Array[CardInstance], is_player: bool
 		if card.has_acted and card.alive:
 			opts["spent"] = true
 		view.setup(card, card.attack_total(allies), card.hp, card.max_hp, opts)
-		view.custom_minimum_size = Vector2(150, 190)
+		view.custom_minimum_size = Vector2(146, 176)
 		view.card_pressed.connect(_on_card_pressed)
 		row.add_child(view)
 
