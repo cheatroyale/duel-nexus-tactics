@@ -91,3 +91,24 @@ Xogot caches a project's file list when it opens it. After files arrive from
 outside, close the project and reopen it (or use its reload/rescan action).
 Asset imports (`.import`) are regenerated on that first open, which can take a
 moment.
+
+
+## Common messages and what they mean
+
+**"Parser error" in a script.** The copy being opened is older than the fix
+commits. The repository is checked on every push: Godot imports the project and
+boots it headlessly, so `main` only contains code that parses and starts. Delete
+the project from Xogot's list and import the freshly downloaded folder again.
+
+**"Not a Godot project" / no `project.godot` found.** The ZIP nests everything in
+a `duel-nexus-tactics-main/` folder. Open (or move) the folder that has
+`project.godot` directly inside it, not its parent and not the ZIP itself.
+
+**A warning about a newer Godot version.** `project.godot` declares Godot 4.3
+features, the same version the CI runs, so any Godot 4.3 or newer opens it
+without complaint.
+
+**"Could not resolve class DB" or similar cascades.** One script failed to parse
+and every script that uses it reported the same error. Only the first error in
+the log matters — that was `trait` being a reserved GDScript keyword, now fixed
+in `DB.trait_def`.
