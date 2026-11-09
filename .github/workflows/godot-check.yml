@@ -29,8 +29,10 @@ jobs:
         run: |
           set -uo pipefail
           ./godot --headless --path . --import > import.log 2>&1 || true
-          echo "=== script errors (first 40) ==="
-          grep -nA1 -E 'Parse Error|Failed to load script' import.log | head -60 || true
+          echo "=== root errors (not DB cascade) ==="
+          grep -A1 'Parse Error' import.log | grep -v 'Could not resolve' | head -14 || true
+          echo "=== cascade count ==="
+          grep -c 'Parse Error' import.log || true
           echo "=== end of errors ==="
           if grep -Eiq 'parse error|failed to load script|script error' import.log; then
             echo "::error::Godot reported script errors; see the list above"
