@@ -30,7 +30,7 @@ jobs:
           set -uo pipefail
           ./godot --headless --path . --import > import.log 2>&1 || true
           echo "=== script errors (first 40) ==="
-          grep -nE 'Parse Error|SCRIPT ERROR|Failed to load script' import.log | head -40 || true
+          grep -nA1 -E 'Parse Error|Failed to load script' import.log | head -60 || true
           echo "=== end of errors ==="
           if grep -Eiq 'parse error|failed to load script|script error' import.log; then
             echo "::error::Godot reported script errors; see the list above"
