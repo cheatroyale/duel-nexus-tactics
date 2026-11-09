@@ -1,0 +1,35 @@
+name: Godot script check
+
+# Imports the project with a headless Godot and fails when any script reports a
+# parse error. This is the only way to have the GDScript checked from here: the
+# log names the exact file and line.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install Godot 4.3
+        run: |
+          set -euo pipefail
+          wget -q https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q Godot_v4.3-stable_linux.x86_64.zip
+          mv Godot_v4.3-stable_linux.x86_64 godot
+          chmod +x godot
+
+      - name: Import project
+        run: |
+          set -uo pipefail
+          ./godot --headless --path . --import 2>&1 | tee import.log
+          if grep -Eiq 'parse error|failed to load script|script error' import.log; then
+            echo "::error::Godot reported script errors; see the log above"
+            exit 1
+          fi
