@@ -110,7 +110,7 @@ func _build() -> void:
 	body.selection_enabled = true
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	body.add_theme_font_size_override("normal_font_size", 14)
+	body.add_theme_font_size_override("normal_font_size", Palette.font(14))
 	body.add_theme_color_override("default_color", Palette.TEXT)
 	panel.add_child(body)
 

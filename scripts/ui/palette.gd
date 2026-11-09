@@ -23,6 +23,15 @@ const STONE := Color("9aa6b2")
 const SPIRIT := Color("6fe3e1")
 const WILD := Color("f472b6")
 
+## All text is drawn at size * FONT_SCALE. The design is a 960x600 canvas, so on
+## a phone (which scales that down to fit) the raw sizes would be tiny; this
+## keeps body text readable without touching every call site.
+const FONT_SCALE := 1.35
+
+
+static func font(size: int) -> int:
+	return int(round(size * FONT_SCALE))
+
 
 static func panel(bg: Color = PANEL, radius: int = 10, border: Color = BORDER, border_width: int = 1) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()
@@ -64,7 +73,7 @@ static func button_box(bg: Color, radius: int = 8) -> StyleBoxFlat:
 static func label(text: String, size: int = 14, color: Color = TEXT) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_font_size_override("font_size", font(size))
 	l.add_theme_color_override("font_color", color)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return l
@@ -80,7 +89,7 @@ static func button(text: String, primary: bool = false) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.focus_mode = Control.FOCUS_NONE
-	b.add_theme_font_size_override("font_size", 14)
+	b.add_theme_font_size_override("font_size", font(14))
 	var base := ACCENT if primary else PANEL_ALT
 	b.add_theme_stylebox_override("normal", button_box(base))
 	b.add_theme_stylebox_override("hover", button_box(base.lightened(0.12)))
@@ -97,7 +106,7 @@ static func chip(text: String) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.focus_mode = Control.FOCUS_NONE
-	b.add_theme_font_size_override("font_size", 10)
+	b.add_theme_font_size_override("font_size", font(10))
 	b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	var base := PANEL_ALT
 	var box := button_box(base, 4)

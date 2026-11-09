@@ -22,7 +22,7 @@ func setup(c: CardInstance, atk: int, hp: int, max_hp: int, opts: Dictionary = {
 	var spent: bool = bool(opts.get("spent", false))
 	var dead: bool = not c.alive
 
-	custom_minimum_size = Vector2(150, 186)
+	custom_minimum_size = Vector2(166, 206)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	mouse_filter = Control.MOUSE_FILTER_STOP

@@ -90,7 +90,7 @@ func _build() -> void:
 	squad_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	var squad_scroll := ScrollContainer.new()
 	squad_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	squad_scroll.custom_minimum_size = Vector2(0, 232)
+	squad_scroll.custom_minimum_size = Vector2(0, 256)
 	squad_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	squad_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	squad_scroll.add_child(squad_box)
@@ -247,7 +247,7 @@ func _refresh_squad() -> void:
 			"selected": i == selected_index,
 			"chips_clickable": true,
 		})
-		view.custom_minimum_size = Vector2(146, 200)
+		view.custom_minimum_size = Vector2(162, 222)
 		view.card_pressed.connect(_on_squad_card_pressed)
 		view.trait_pressed.connect(_remove_stack)
 		squad_box.add_child(view)

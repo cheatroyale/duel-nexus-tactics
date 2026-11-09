@@ -123,7 +123,7 @@ func _build() -> void:
 	log_label.bbcode_enabled = false
 	log_label.custom_minimum_size = Vector2(0, 110)
 	log_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	log_label.add_theme_font_size_override("normal_font_size", 13)
+	log_label.add_theme_font_size_override("normal_font_size", Palette.font(13))
 	log_label.add_theme_color_override("default_color", Palette.MUTED)
 	log_panel.add_child(log_label)
 
@@ -157,7 +157,7 @@ func _refresh_row(row: HBoxContainer, team: Array[CardInstance], is_player: bool
 		if card.has_acted and card.alive:
 			opts["spent"] = true
 		view.setup(card, card.attack_total(allies), card.hp, card.max_hp, opts)
-		view.custom_minimum_size = Vector2(146, 176)
+		view.custom_minimum_size = Vector2(160, 198)
 		view.card_pressed.connect(_on_card_pressed)
 		row.add_child(view)
 
