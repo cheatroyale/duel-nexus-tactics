@@ -1,5 +1,7 @@
 # Duel Nexus Tactics
 
+*A card tactics academy RPG.*
+
 A team-building card battler in Godot 4. Cards are creatures you draft into a
 squad of five; traits are the "stack components" you layer on them, Siralim-style
 — every stack multiplies the effect, and auras from different cards add up.
