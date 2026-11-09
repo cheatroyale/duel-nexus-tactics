@@ -102,7 +102,7 @@ func self_stat(key: String) -> int:
 		var stacks := trait_stacks(String(trait_id))
 		if stacks <= 0:
 			continue
-		var mods: Dictionary = DB.trait(String(trait_id)).get("mods", {})
+		var mods: Dictionary = DB.trait_def(String(trait_id)).get("mods", {})
 		total += int(mods.get(key, 0)) * stacks
 	return total
 
@@ -114,7 +114,7 @@ func aura_stat(key: String) -> int:
 		var stacks := trait_stacks(String(trait_id))
 		if stacks <= 0:
 			continue
-		var mods: Dictionary = DB.trait(String(trait_id)).get("team_mods", {})
+		var mods: Dictionary = DB.trait_def(String(trait_id)).get("team_mods", {})
 		total += int(mods.get(key, 0)) * stacks
 	return total
 

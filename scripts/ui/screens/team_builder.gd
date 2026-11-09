@@ -183,7 +183,7 @@ func _refresh_codex() -> void:
 		selected = squad[selected_index]
 
 	for trait_id in DB.TRAIT_ORDER:
-		var definition := DB.trait(String(trait_id))
+		var definition := DB.trait_def(String(trait_id))
 		if definition.is_empty():
 			continue
 		var own := 0
@@ -296,7 +296,7 @@ func _add_stack(trait_id: String) -> void:
 	if selected_index < 0 or selected_index >= squad.size():
 		return
 	var card := squad[selected_index]
-	var definition := DB.trait(trait_id)
+	var definition := DB.trait_def(trait_id)
 	if definition.is_empty():
 		return
 	if card.trait_stacks(trait_id) >= int(definition.get("max_stacks", 1)):
@@ -347,5 +347,5 @@ func _points_used() -> int:
 	var total := 0
 	for card in squad:
 		for trait_id in card.traits:
-			total += int(card.traits[trait_id]) * int(DB.trait(String(trait_id)).get("cost", 1))
+			total += int(card.traits[trait_id]) * int(DB.trait_def(String(trait_id)).get("cost", 1))
 	return total

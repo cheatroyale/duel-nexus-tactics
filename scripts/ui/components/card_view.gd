@@ -87,7 +87,7 @@ func setup(c: CardInstance, atk: int, hp: int, max_hp: int, opts: Dictionary = {
 	else:
 		for trait_id in trait_ids:
 			var stacks := c.trait_stacks(trait_id)
-			var definition := DB.trait(trait_id)
+			var definition := DB.trait_def(trait_id)
 			var chip_text := "%s x%d" % [String(definition.get("name", trait_id)), stacks]
 			tooltip_traits += "\n%s x%d: %s" % [String(definition.get("name", trait_id)), stacks, DB.trait_summary(trait_id, stacks)]
 			if chips_clickable:

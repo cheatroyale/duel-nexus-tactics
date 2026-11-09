@@ -255,7 +255,7 @@ static func card(card_id: String) -> Dictionary:
 	return CARDS.get(card_id, {})
 
 
-static func trait(trait_id: String) -> Dictionary:
+static func trait_def(trait_id: String) -> Dictionary:
 	return TRAITS.get(trait_id, {})
 
 
@@ -290,7 +290,7 @@ static func ability_summary(ability: Dictionary) -> String:
 
 ## A one-line description of what `stacks` of a trait actually do right now.
 static func trait_summary(trait_id: String, stacks: int) -> String:
-	var data := trait(trait_id)
+	var data := trait_def(trait_id)
 	var parts := ""
 	parts = _append_mods(parts, data.get("mods", {}), stacks, "")
 	parts = _append_mods(parts, data.get("team_mods", {}), stacks, "all allies ")
